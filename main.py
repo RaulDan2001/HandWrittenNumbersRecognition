@@ -22,7 +22,12 @@ if (os.path.exists(neural_network_path)) and load == 'y':
         neural_network = tf.keras.models.load_model(neural_network_path)
         print('reteaua a fost incarcata cu succes\n')    
 else: 
-    print("Nu ati ales sa se caute retea sau nu exista nici o retea")
+    print("Nu ati ales sa se caute retea sau nu exista nici o retea\n")
+    
+    hidden_layer_count = int(input("Cate straturi ascunse dorit: "))
+    hidden_layer_units = int(input("\nCati neuroni doriti pe fiecare strat ascuns: "))
+    epochs_count = int(input("\nCate epoci dorit: "))
+
     print('Se va antrena o retea...\n')
 
     #importez dataset-ul cu numerele scrise de mana
@@ -44,8 +49,8 @@ else:
 
     neural_network.add(tf.keras.layers.Flatten(input_shape=(28,28)))
 
-    neural_network.add(tf.keras.layers.Dense(units=36, activation=tf.nn.relu))
-    neural_network.add(tf.keras.layers.Dense(units=36, activation=tf.nn.relu))
+    for i in range(1,hidden_layer_count + 1):
+        neural_network.add(tf.keras.layers.Dense(units=hidden_layer_units, activation=tf.nn.relu))
 
     neural_network.add(tf.keras.layers.Dense(units=10, activation=tf.keras.activations.softmax))
 
@@ -53,7 +58,7 @@ else:
     neural_network.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     #pun reteaua sa invete
-    neural_network.fit(x_train, y_train, epochs=10)
+    neural_network.fit(x_train, y_train, epochs=epochs_count)
 
     print('acum incepe procesul de testare')
 
